@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDY BACKSHOT LLC | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .counter-glow {
+            text-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+        }
+
+        .x-mark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            font-size: 2.5rem;
+            color: #ef4444;
+            font-weight: 900;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .day-box {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            position: relative;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 md:p-8">
+
+    <!-- Header & Quote -->
+    <header class="w-full max-w-5xl text-center mb-12">
+        <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+            ANDY BACKSHOT LLC
+        </h1>
+        <div class="inline-block p-4 glass-card rounded-2xl border-l-4 border-blue-500 italic text-blue-200 text-lg shadow-xl">
+            "Make me this app and you get 10 percent of the profits"
+        </div>
+    </header>
+
+    <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-5 gap-8">
+        
+        <!-- Counter Section (3 Columns wide on large screens) -->
+        <section class="lg:col-span-3 glass-card rounded-3xl p-8 flex flex-col items-center justify-center shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-transparent"></div>
+            <h2 class="text-xl font-bold uppercase tracking-widest text-slate-400 mb-8">Official Backshot Count</h2>
+            
+            <div class="flex items-center justify-center gap-6 md:gap-12 w-full">
+                <!-- Left Picture -->
+                <div class="w-24 h-24 md:w-40 md:h-40 rounded-2xl overflow-hidden border-2 border-slate-700 shadow-lg shrink-0">
+                    <img src="andy1.jpg">
+                </div>
+
+                <!-- Static Counter -->
+                <div id="counterDisplay" class="text-9xl md:text-[12rem] font-black counter-glow text-white transition-all duration-300">
+                    4
+                </div>
+
+                <!-- Right Picture -->
+                <div class="w-24 h-24 md:w-40 md:h-40 rounded-2xl overflow-hidden border-2 border-slate-700 shadow-lg shrink-0">
+                    <img src="andy2.jpg">
+                </div>
+            </div>
+
+            <div class="mt-8 px-6 py-2 bg-slate-900/50 rounded-full border border-slate-700 text-slate-500 text-sm font-bold tracking-widest uppercase">
+                Status: Finalized & Locked
+            </div>
+        </section>
+
+        <!-- Calendar Section (2 Columns wide on large screens) -->
+        <section class="lg:col-span-2 glass-card rounded-3xl p-8 flex flex-col shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-transparent"></div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold uppercase tracking-widest text-slate-400">February Schedule</h2>
+                <span class="text-xs bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/30 font-bold">LOCKED</span>
+            </div>
+            
+            <!-- Calendar Header -->
+            <div class="calendar-grid text-center text-xs font-bold text-slate-500 mb-2">
+                <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+            </div>
+
+            <!-- Calendar Days -->
+            <div id="calendarContainer" class="calendar-grid">
+                <!-- JS will populate 28 days -->
+            </div>
+
+            <div class="mt-6 flex items-center gap-3 text-sm text-slate-400 bg-slate-900/40 p-4 rounded-xl border border-slate-800">
+                <div class="w-4 h-4 bg-red-500/20 border border-red-500 flex items-center justify-center text-[10px] font-bold text-red-500 rounded">X</div>
+                <span>Indicates Potential Backshot Day</span>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-12 text-slate-500 text-sm">
+        &copy; 2024 ANDY BACKSHOT LLC. All Rights Reserved. Database Immutable.
+    </footer>
+
+    <script>
+        window.onload = function() {
+            generateFebruary();
+        };
+
+        function generateFebruary() {
+            const container = document.getElementById('calendarContainer');
+            const totalDays = 28; // Feb
+            
+            // Randomly select 10 unique days for the 'X'
+            const markedDays = new Set();
+            while(markedDays.size < 10) {
+                markedDays.add(Math.floor(Math.random() * totalDays) + 1);
+            }
+
+            for (let i = 1; i <= totalDays; i++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day-box border border-slate-800/50 hover:bg-slate-800 transition-colors';
+                
+                // Add day number
+                dayDiv.innerHTML = `<span class="text-slate-500 text-xs absolute top-1 left-1">${i}</span>`;
+                
+                // Add X if it's one of the random days
+                if (markedDays.has(i)) {
+                    const xMark = document.createElement('div');
+                    xMark.className = 'x-mark';
+                    xMark.innerText = 'X';
+                    dayDiv.appendChild(xMark);
+                    dayDiv.classList.add('bg-red-500/5');
+                    dayDiv.classList.replace('border-slate-800/50', 'border-red-500/20');
+                }
+                
+                container.appendChild(dayDiv);
+            }
+        }
+    </script>
+</body>
+</html>
